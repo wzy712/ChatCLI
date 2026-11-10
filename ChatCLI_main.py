@@ -1,7 +1,8 @@
-from core.Model import Model
-import json
+from core.MainLoop import MainLoop
 
-api_key="sk-xxxxxxxxxxxxxxxxxxxxxxx" #改成你自己的deepseek apikey
+
+api_key = "sk-xxxxxxxxxxxxxxxxxxxxx"  # 改成你自己的deepseek apikey
+
 
 def get_weather(arg):
     return "24摄氏度"
@@ -127,7 +128,7 @@ For example:
                          "fetch_webpage": fetch_webpage}
 
     messages = []
-    model = Model({
+    config = {
         "base_url": "https://api.deepseek.com",
         "models": {
             "default": "deepseek-flash"
@@ -139,26 +140,11 @@ For example:
         },
         "tool_path": "./tools",
         "tools": tools,
-        "api_key": f"{api_key}"
-    })
-
-    while True:
-        user_input = input("User>\t")
-        messages.append({"role": "user", "content": user_input})
-        response, message = model.send(messages, tools)
-        print(f"Assistant>\t{message.content}")
-
-        while response.choices[0].finish_reason == "tool_calls":
-            messages.append(message)
-            for tool in message.tool_calls:
-                name = tool.function.name
-                arg = json.loads(tool.function.arguments)
-
-                messages.append({"role": "tool", "tool_call_id": tool.id, "content": tool_function_map[name](arg)})
-                print(f"Tool call>\t{tool.function.name}\t{arg}")
-            response, message = model.send(messages, tools)
-            print(message.content)
-        messages.append(message)
+        "api_key": f"{api_key}",
+        "tool_function_map": tool_function_map
+    }
+    main=MainLoop(config)
+    main.run()
 
 
 if __name__ == "__main__":

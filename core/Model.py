@@ -1,6 +1,6 @@
 from openai.types.chat import ChatCompletion, ChatCompletionMessage
 
-from core.MainLoop import ChatConfig
+from ChatCLI_types.types import ChatConfig
 from openai import OpenAI
 
 
