@@ -1,23 +1,25 @@
-from typing import Dict, Union, List
+from typing import List
 
+from core.config.ChatConfig import ChatConfig
+from core.Tool import Tool
 from core.Model import Model
 import json
 
-from ChatCLI_types.types import ChatConfig
 
+class ChatLoop:
+    tools: List[Tool]
+    model: Model
 
-class MainLoop:
-    def __init__(self, config: ChatConfig):
-        self.messages=[]
-        self.model=Model(config)
-        self.tools=config["tools"]
-        self.tool_function_map=config["tool_function_map"]
+    def __init__(self, config: ChatConfig, model: Model):
+        self.messages = []
+        self.model = model
+        self.tools = config.tools
 
     def run(self):
-        messages=self.messages
-        model=self.model
-        tools=self.tools
-        tool_function_map=self.tool_function_map
+        messages = self.messages
+        model = self.model
+        tools = [tool.description for tool in self.tools]
+        functions = {tool.name: tool.function for tool in self.tools}
 
         while True:
             user_input = input("User>\t")
@@ -31,7 +33,7 @@ class MainLoop:
                     name = tool.function.name
                     arg = json.loads(tool.function.arguments)
 
-                    messages.append({"role": "tool", "tool_call_id": tool.id, "content": tool_function_map[name](arg)})
+                    messages.append({"role": "tool", "tool_call_id": tool.id, "content": functions[name](arg)})
                     print(f"Tool call>\t{tool.function.name}\t{arg}")
                 response, message = model.send(messages, tools)
                 print(message.content)

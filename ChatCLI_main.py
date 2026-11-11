@@ -1,7 +1,10 @@
-from core.MainLoop import MainLoop
+from core.config.ChatConfig import ChatConfig
+from core.config.ModelConfig import ModelConfig
+from core.ChatLoop import ChatLoop
+from core.Model import Model
+from core.Tool import Tool
 
-
-api_key = "sk-xxxxxxxxxxxxxxxxxxxxx"  # 改成你自己的deepseek apikey
+api_key = "sk-d64d3a41b11a4d92860ebd8793d75bbb"  # 改成你自己的deepseek apikey
 
 
 def get_weather(arg):
@@ -48,7 +51,7 @@ def fetch_webpage(arg):
 
 def main():
     tools = [
-        {
+        Tool("get_weather", {
             "type": "function",
             "function": {
                 "name": "get_weather",
@@ -64,8 +67,8 @@ def main():
                     "required": ["location"],
                 },
             },
-        },
-        {
+        }, get_weather),
+        Tool("web_search", {
             "type": "function",
             "function": {
                 "name": "web_search",
@@ -104,8 +107,8 @@ For example:
                     "required": ["query", "count"]
                 }
             }
-        },
-        {
+        }, web_search),
+        Tool("fetch_webpage", {
             "type": "function",
             "function": {
                 "name": "fetch_webpage",
@@ -121,12 +124,8 @@ For example:
                 },
                 "required": ["url"]
             }
-        }
+        }, fetch_webpage)
     ]
-    tool_function_map = {"get_weather": get_weather,
-                         "web_search": web_search,
-                         "fetch_webpage": fetch_webpage}
-
     messages = []
     config = {
         "base_url": "https://api.deepseek.com",
@@ -141,9 +140,13 @@ For example:
         "tool_path": "./tools",
         "tools": tools,
         "api_key": f"{api_key}",
-        "tool_function_map": tool_function_map
     }
-    main=MainLoop(config)
+    chat_config = ChatConfig(data={"tools": tools})
+    model_config = ModelConfig(data={"base_url": "https://api.deepseek.com",
+                                     "api_key": api_key,
+                                     "model_name": "deepseek-flash"})
+    model = Model(model_config)
+    main = ChatLoop(chat_config, model)
     main.run()
 
 
