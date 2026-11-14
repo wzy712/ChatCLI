@@ -4,58 +4,14 @@ from core.config.ChatConfig import ChatConfig
 from core.config.ModelConfig import ModelConfig
 from core.ChatLoop import ChatLoop
 from core.Model import Model
-from core.loader.ToolLoader import load_tool
+from core.loader.ToolLoader import ToolLoader
 
-api_key = "sk-fd893ccb5d024555970c2b7874fc435f"  # 改成你自己的deepseek apikey
-
-
-def get_weather(arg):
-    return "24摄氏度"
-
-
-def web_search(arg):
-    query = arg["query"]
-    count = arg["count"]
-    import requests
-
-    response = requests.post(
-        "https://api.deepseek.com/v1/tools/search",
-        headers={
-            "Authorization": f"Bearer {api_key}",
-        },
-        json={
-            "query": query,
-            "count": count,
-            "need_content": True,
-        },
-    )
-    response.raise_for_status()
-    results = [{"type": "text", "text": f"title: {result["title"]}\nurl: {result["url"]}\nsummary: {result["summary"]}"}
-               for result in response.json()["results"]]
-    return results
-
-
-def fetch_webpage(arg):
-    import requests
-    url = arg["url"]
-
-    response = requests.post(
-        "https://api.deepseek.com/v1/tools/fetch",
-        headers={
-            "Authorization": f"Bearer {api_key}",
-        },
-        json={"url": url},
-    )
-    response.raise_for_status()
-    page = response.json()
-    return [{"type": "text", "text": f"title: {page["title"]}\ncontent: {page["content"]}"}]
+api_key = "sk-xxxxxxxxxxxxxxxxx"  # 改成你自己的deepseek apikey
 
 
 def main():
-    tools = [
-        load_tool(Path("tools/web_search"), "web_search"),
-        load_tool(Path("tools/web_fetch"), "web_fetch")
-    ]
+    tool_loader=ToolLoader()
+    tools = tool_loader(Path("tools"), ["web_search", "web_fetch"])
     messages = []
     config = {
         "base_url": "https://api.deepseek.com",

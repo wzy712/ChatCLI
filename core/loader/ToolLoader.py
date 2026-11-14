@@ -1,8 +1,10 @@
+import os
 from pathlib import Path
 
 import json
 
 import sys
+from typing import List
 
 from core.Tool import Tool
 import importlib.util as ipu
@@ -25,3 +27,13 @@ def load_tool(folder_path: Path, tool_name: str) -> Tool:
 
     func = getattr(module, func_name)
     return Tool(func_name, description, func)
+
+class ToolLoader:
+    def __call__(self, source_path: Path, tool_list: List[str]):
+        folders=os.listdir(source_path)
+        tools=[]
+        for tool in tool_list:
+            tools.append(load_tool(Path(source_path)/tool, tool))
+
+        return tools
+
