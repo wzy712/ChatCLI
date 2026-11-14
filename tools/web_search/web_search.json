@@ -1,0 +1,21 @@
+{
+  "type": "function",
+  "function": {
+    "name": "web_search",
+    "description": "Search the web by query and get structured results.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Search terms, 1 to 128 Unicode characters, can't be all blank, supports the search syntax listed below.\n\nSearch Syntax\n\nThe search syntax in the query is passed directly to the search service. The examples in the table below combine operators with search terms; you can combine multiple operators in one query.\n\nOperator Example Description\nsite: DeepSeek site:github.com Limits results to a specified site, for multiple sites separate with spaces and connect using OR, e.g., DeepSeek site:github.com OR site:huggingface.co.\n-site: DeepSeek -site:example.com Exclude specified sites, for multiple sites separate with spaces.\n- DeepSeek -ads Exclude pages containing specified keywords, separate multiple keywords with spaces.\n-\"...\" DeepSeek -\"release notes\" Exclude pages containing specified phrases, phrases can contain spaces, separate multiple phrases with spaces.\n\"...\" DeepSeek \"exact phrase\" Exact match for specified phrases, separate multiple phrases with spaces.\nlang: DeepSeek lang:zh,en Limit results to specified languages, separate multiple languages with commas, e.g., lang:zh,en.\nafter: DeepSeek after:2025 or DeepSeek after:2025-01-01 Limit results to pages published after the specified date.\nbefore: DeepSeek before:2026 or DeepSeek before:2026-06-01 Limit results to pages published before the specified date.\nFor example:\n\n{\n\"query\": \"DeepSeek model site:github.com OR site:huggingface.co lang:zh after:2025\",\n\"count\": 10\n}"
+        },
+        "count": {
+          "type": "integer",
+          "description": "Number of returns, 1 to 50."
+        }
+      },
+      "required": ["query", "count"]
+    }
+  }
+}
