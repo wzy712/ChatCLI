@@ -10,6 +10,8 @@ chat_memory_folder: Path = Path("chat_memory")
 @contextmanager
 def ChatContextManager(chat_name: str):
     chat_file: str = f"{chat_name}.pickle"
+    if not os.path.exists(chat_memory_folder):
+        os.mkdir(chat_memory_folder)
     chat_list = os.listdir(chat_memory_folder)
     context: ChatContext = ChatContext()
     file_path = chat_memory_folder / chat_file
