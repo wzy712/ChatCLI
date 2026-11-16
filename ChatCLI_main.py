@@ -1,12 +1,13 @@
 from pathlib import Path
 
+from core.Chat.ReActLoop import ReActLoop
 from core.config.ChatConfig import ChatConfig
 from core.config.ModelConfig import ModelConfig
 from core.Chat.ChatLoop import ChatLoop
 from core.Model import Model
 from core.loader.ToolLoader import ToolLoader
 
-api_key = "sk-xxxxxxxxxxxxxxxxxx"  # 改成你自己的deepseek apikey
+api_key = "sk-f90a6244e6f24b46aa3092f2234ace63"  # 改成你自己的deepseek apikey
 
 
 def main():
@@ -17,8 +18,8 @@ def main():
                                      "api_key": api_key,
                                      "model_name": "deepseek-flash"})
     model = Model(model_config)
-    main = ChatLoop(chat_config, model)
-    main.run(chat_name="new_chat_0")
+    main = ReActLoop(chat_config, model)
+    main.run()
 
 
 if __name__ == "__main__":
