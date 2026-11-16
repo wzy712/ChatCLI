@@ -7,7 +7,7 @@ from core.Chat.ChatLoop import ChatLoop
 from core.Model import Model
 from core.loader.ToolLoader import ToolLoader
 
-api_key = "sk-f90a6244e6f24b46aa3092f2234ace63"  # 改成你自己的deepseek apikey
+api_key = "sk-c3eeb625bef54ff584cb6791343af798"  # 改成你自己的deepseek apikey
 
 
 def main():

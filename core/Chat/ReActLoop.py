@@ -181,7 +181,7 @@ class ReActLoop:
 
                         if is_in_tao:
                             TAO_history.append(
-                            {"role": "tool", "tool_call_id": tool.id, "content": "None" if name in react_tool_name else functions[name](arg)})
+                            {"role": "tool", "tool_call_id": tool.id, "content": functions[name](arg)})
                         else:
                             messages.append(
                             {"role": "tool", "tool_call_id": tool.id, "content": functions[name](arg)})
